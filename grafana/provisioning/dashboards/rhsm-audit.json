@@ -1,0 +1,291 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "templating": {
+    "list": [
+      {
+        "name": "filter",
+        "type": "custom",
+        "label": "System Filter",
+        "current": { "text": "all", "value": "all" },
+        "options": [
+          { "text": "All Systems", "value": "all", "selected": true },
+          { "text": "Stale Only", "value": "stale", "selected": false },
+          { "text": "Untagged Only", "value": "untagged", "selected": false },
+          { "text": "Tagged Only", "value": "tagged", "selected": false }
+        ],
+        "query": "all,stale,untagged,tagged",
+        "hide": 0
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Registered",
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 0 },
+      "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "rhsm-audit-ds" },
+      "targets": [{
+        "refId": "A",
+        "type": "json",
+        "source": "url",
+        "format": "table",
+        "parser": "backend",
+        "url": "http://localhost:8080/summary",
+        "url_options": { "method": "GET" },
+        "root_selector": "",
+        "columns": [{ "selector": "registered", "text": "Registered", "type": "number" }]
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "fixed", "fixedColor": "#3274D9" },
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "#3274D9", "value": null }] },
+          "links": [{ "title": "Show all systems", "url": "/d/rhsm-audit?var-filter=all" }]
+        },
+        "overrides": []
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value", "graphMode": "none", "textMode": "value" }
+    },
+    {
+      "type": "stat",
+      "title": "Purchased",
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 0 },
+      "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "rhsm-audit-ds" },
+      "targets": [{
+        "refId": "A",
+        "type": "json",
+        "source": "url",
+        "format": "table",
+        "parser": "backend",
+        "url": "http://localhost:8080/summary",
+        "url_options": { "method": "GET" },
+        "root_selector": "",
+        "columns": [{ "selector": "purchased", "text": "Purchased", "type": "number" }]
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "fixed", "fixedColor": "#73BF69" },
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "#73BF69", "value": null }] }
+        },
+        "overrides": []
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value", "graphMode": "none", "textMode": "value" }
+    },
+    {
+      "type": "stat",
+      "title": "Consuming",
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 0 },
+      "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "rhsm-audit-ds" },
+      "targets": [{
+        "refId": "A",
+        "type": "json",
+        "source": "url",
+        "format": "table",
+        "parser": "backend",
+        "url": "http://localhost:8080/summary",
+        "url_options": { "method": "GET" },
+        "root_selector": "",
+        "columns": [{ "selector": "consuming", "text": "Consuming", "type": "number" }]
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "fixed", "fixedColor": "#F2CC0C" },
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "#F2CC0C", "value": null }] }
+        },
+        "overrides": []
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value", "graphMode": "none", "textMode": "value" }
+    },
+    {
+      "type": "stat",
+      "title": "Delta",
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 0 },
+      "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "rhsm-audit-ds" },
+      "targets": [{
+        "refId": "A",
+        "type": "json",
+        "source": "url",
+        "format": "table",
+        "parser": "backend",
+        "url": "http://localhost:8080/summary",
+        "url_options": { "method": "GET" },
+        "root_selector": "",
+        "columns": [{ "selector": "delta", "text": "Delta", "type": "number" }]
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [
+            { "color": "#F2495C", "value": null },
+            { "color": "#FF9830", "value": 0 },
+            { "color": "#73BF69", "value": 1 }
+          ]}
+        },
+        "overrides": []
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value", "graphMode": "none", "textMode": "value" }
+    },
+    {
+      "type": "stat",
+      "title": "Stale (90+ days)",
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 0 },
+      "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "rhsm-audit-ds" },
+      "targets": [{
+        "refId": "A",
+        "type": "json",
+        "source": "url",
+        "format": "table",
+        "parser": "backend",
+        "url": "http://localhost:8080/summary",
+        "url_options": { "method": "GET" },
+        "root_selector": "",
+        "columns": [{ "selector": "stale", "text": "Stale", "type": "number" }]
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [
+            { "color": "#73BF69", "value": null },
+            { "color": "#F2495C", "value": 1 }
+          ]},
+          "links": [{ "title": "Show stale systems", "url": "/d/rhsm-audit?var-filter=stale" }]
+        },
+        "overrides": []
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value", "graphMode": "none", "textMode": "value" }
+    },
+    {
+      "type": "stat",
+      "title": "Untagged",
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 0 },
+      "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "rhsm-audit-ds" },
+      "targets": [{
+        "refId": "A",
+        "type": "json",
+        "source": "url",
+        "format": "table",
+        "parser": "backend",
+        "url": "http://localhost:8080/summary",
+        "url_options": { "method": "GET" },
+        "root_selector": "",
+        "columns": [{ "selector": "untagged", "text": "Untagged", "type": "number" }]
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [
+            { "color": "#73BF69", "value": null },
+            { "color": "#FF9830", "value": 1 }
+          ]},
+          "links": [{ "title": "Show untagged systems", "url": "/d/rhsm-audit?var-filter=untagged" }]
+        },
+        "overrides": []
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value", "graphMode": "none", "textMode": "value" }
+    },
+    {
+      "type": "table",
+      "title": "Subscription Allocations",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 4 },
+      "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "rhsm-audit-ds" },
+      "targets": [{
+        "refId": "A",
+        "type": "json",
+        "source": "url",
+        "format": "table",
+        "parser": "backend",
+        "url": "http://localhost:8080/subscriptions",
+        "url_options": { "method": "GET" },
+        "root_selector": "",
+        "columns": [
+          { "selector": "name", "text": "Subscription", "type": "string" },
+          { "selector": "sku", "text": "SKU", "type": "string" },
+          { "selector": "status", "text": "Status", "type": "string" },
+          { "selector": "purchased", "text": "Purchased", "type": "number" },
+          { "selector": "consumed", "text": "Consumed (API)", "type": "number" },
+          { "selector": "delta", "text": "Delta", "type": "number" }
+        ]
+      }],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Delta" },
+            "properties": [{
+              "id": "thresholds",
+              "value": { "mode": "absolute", "steps": [
+                { "color": "#F2495C", "value": null },
+                { "color": "#FF9830", "value": 0 },
+                { "color": "#73BF69", "value": 1 }
+              ]}
+            }, {
+              "id": "custom.cellOptions",
+              "value": { "type": "color-text" }
+            }]
+          }
+        ]
+      },
+      "options": { "showHeader": true, "cellHeight": "sm" }
+    },
+    {
+      "type": "table",
+      "title": "Systems (filter: ${filter})",
+      "gridPos": { "h": 12, "w": 24, "x": 0, "y": 12 },
+      "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "rhsm-audit-ds" },
+      "targets": [{
+        "refId": "A",
+        "type": "json",
+        "source": "url",
+        "format": "table",
+        "parser": "backend",
+        "url": "http://localhost:8080/systems?filter=${filter}",
+        "url_options": { "method": "GET" },
+        "root_selector": "",
+        "columns": [
+          { "selector": "hostname", "text": "Hostname", "type": "string" },
+          { "selector": "console_url", "text": "console_url", "type": "string" },
+          { "selector": "insights_registered", "text": "Insights", "type": "boolean" },
+          { "selector": "type", "text": "Type", "type": "string" },
+          { "selector": "last_checkin", "text": "Last Check-in", "type": "string" },
+          { "selector": "entitlement_status", "text": "Entitlement", "type": "string" },
+          { "selector": "entitlement_count", "text": "Count", "type": "number" },
+          { "selector": "purpose", "text": "System Purpose", "type": "string" }
+        ]
+      }],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Hostname" },
+            "properties": [{
+              "id": "links",
+              "value": [{
+                "title": "Open in Red Hat Console",
+                "url": "${__data.fields.console_url}",
+                "targetBlank": true
+              }]
+            }]
+          },
+          {
+            "matcher": { "id": "byName", "options": "console_url" },
+            "properties": [{
+              "id": "custom.hidden",
+              "value": true
+            }]
+          }
+        ]
+      },
+      "options": { "showHeader": true, "cellHeight": "sm" }
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": ["rhsm", "subscription", "audit"],
+  "time": { "from": "now-6h", "to": "now" },
+  "title": "RHSM Subscription Audit",
+  "uid": "rhsm-audit",
+  "version": 3
+}

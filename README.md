@@ -30,10 +30,9 @@ python3 rhsm-audit.py --skip-enrich
 python3 rhsm-audit.py --output-dir /tmp/audit
 ```
 
-## Live Dashboard
+## Live Dashboard (Flask)
 
 ```bash
-# Run the Flask dashboard (auto-refreshes from the RHSM API)
 RHSM_OFFLINE_TOKEN=$(cat ~/.rhsm-offline-token) python3 dashboard.py
 # Open http://localhost:8099
 
@@ -41,6 +40,29 @@ RHSM_OFFLINE_TOKEN=$(cat ~/.rhsm-offline-token) python3 dashboard.py
 podman build -t rhsm-dashboard .
 podman run -p 8099:8099 -e RHSM_OFFLINE_TOKEN=$(cat ~/.rhsm-offline-token) rhsm-dashboard
 ```
+
+## Grafana Dashboard (Recommended)
+
+All-in-one container: data server + Grafana with pre-provisioned dashboard.
+Clickable stat tiles filter by stale/untagged/tagged. Hostnames link directly
+to Red Hat Console (Insights inventory).
+
+```bash
+podman build -t rhsm-audit-dashboard -f Containerfile.grafana .
+
+podman run -d --name rhsm-dashboard --network=host \
+  -e RHSM_OFFLINE_TOKEN="$(cat ~/.rhsm-offline-token)" \
+  rhsm-audit-dashboard
+# Open http://localhost:3000 — no login required (anonymous viewer enabled)
+# Admin: admin / rhsm-audit
+```
+
+The initial audit takes 1–3 minutes (enriches each system and cross-references
+Insights inventory for deep links). Data auto-refreshes every 60 minutes, or
+POST to `http://localhost:8080/refresh` to trigger immediately.
+
+Requires `--network=host` so the data server can reach
+`api.access.redhat.com` and `console.redhat.com` for API calls.
 
 ## Outputs
 
@@ -55,7 +77,8 @@ podman run -p 8099:8099 -e RHSM_OFFLINE_TOKEN=$(cat ~/.rhsm-offline-token) rhsm-
 
 - Python 3.6+
 - `requests` (pre-installed on RHEL 8/9)
-- `flask` (dashboard only)
+- `flask` (Flask dashboard only)
+- `podman` (Grafana dashboard)
 
 ## Notes
 

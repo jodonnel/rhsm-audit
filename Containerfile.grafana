@@ -1,0 +1,31 @@
+FROM grafana/grafana:latest
+
+USER root
+
+# Install Python + requests + curl
+RUN apk add --no-cache python3 py3-requests curl bash
+
+# Install Infinity datasource plugin
+ENV GF_INSTALL_PLUGINS=yesoreyeram-infinity-datasource
+
+# Grafana config
+ENV GF_SECURITY_ADMIN_USER=admin
+ENV GF_SECURITY_ADMIN_PASSWORD=rhsm-audit
+ENV GF_AUTH_ANONYMOUS_ENABLED=true
+ENV GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+ENV GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/dashboards/rhsm-audit.json
+
+# Copy audit tooling
+COPY rhsm-audit.py /opt/rhsm-audit/
+COPY data-server.py /opt/rhsm-audit/
+COPY entrypoint.sh /opt/rhsm-audit/
+RUN chmod +x /opt/rhsm-audit/entrypoint.sh
+
+# Copy Grafana provisioning
+COPY grafana/provisioning/ /etc/grafana/provisioning/
+
+EXPOSE 3000
+
+USER grafana
+
+ENTRYPOINT ["/opt/rhsm-audit/entrypoint.sh"]

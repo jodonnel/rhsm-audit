@@ -1,0 +1,34 @@
+apiVersion: 1
+datasources:
+  - name: RHSM Audit
+    uid: rhsm-audit-ds
+    type: yesoreyeram-infinity-datasource
+    access: proxy
+    isDefault: true
+    jsonData:
+      global_queries:
+        - name: subscriptions
+          id: subscriptions
+          url: http://localhost:8080/subscriptions
+          type: json
+          source: url
+        - name: systems
+          id: systems
+          url: http://localhost:8080/systems
+          type: json
+          source: url
+        - name: stale
+          id: stale
+          url: http://localhost:8080/stale
+          type: json
+          source: url
+        - name: untagged
+          id: untagged
+          url: http://localhost:8080/untagged
+          type: json
+          source: url
+        - name: summary
+          id: summary
+          url: http://localhost:8080/summary
+          type: json
+          source: url
